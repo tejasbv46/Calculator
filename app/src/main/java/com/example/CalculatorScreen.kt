@@ -18,7 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-igit remote add origin https://github.com/tejasbv46/Calculator.gitmport androidx.compose.material.icons.automirrored.filled.Backspace
+//github.com/tejasbv46/Calculator.gitmport androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ContentCopy
@@ -285,7 +285,7 @@ fun CalculatorScreen(
                     StandardButtons(viewModel, buttonHeight = standardButtonHeight, fontSize = standardFontSize, rowSpacing = rowSpacing)
                 }
             }
-            
+
             // Safety bottom padding
             Spacer(modifier = Modifier.height(if (compact) 8.dp else 16.dp))
         }
