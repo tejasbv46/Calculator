@@ -4,9 +4,9 @@ Precision Calc is a complete, production-ready Android Calculator application bu
 
 ---
 
-## 🔒 Security & Authentication Design (Day 2)
+## 🔒 Security & Authentication Design 
 
-We have implemented **Local Authentication** with secure salted hashing to manage user profiles on-device.
+i have implemented **Local Authentication** with secure salted hashing to manage user profiles on-device.
 
 ### 🛡️ Local Auth vs. Firebase Authentication (Trade-offs)
 - **Offline Autonomy**: Using a local SQLite Room database keeps the application 100% self-contained and offline-first. Users can registers and authenticate without any cell coverage or external network calls.
