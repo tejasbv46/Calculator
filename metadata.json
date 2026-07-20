@@ -1,0 +1,6 @@
+{
+  "name": "Calculator",
+  "description": "A beautiful, feature-rich Material Design 3 Calculator app with history, landscape mode, and scientific mode.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
