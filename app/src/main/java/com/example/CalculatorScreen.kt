@@ -56,7 +56,8 @@ fun CalculatorScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
-    var showHistorySheet by remember { mutableStateOf(false) }
+    var showHistorySheet by remember { mutableStateOf(false)
+    }
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -78,29 +79,29 @@ fun CalculatorScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                // Handle horizontal safe areas (notches) and status bar height
-                windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Calculate,
-                            contentDescription = "Calculator App Icon",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = "Calculator",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
-                    }
-                },
-                actions = {
-                    // Toggle scientific mode (only needed in portrait since landscape shows it automatically)
-                    if (!isLandscape) {
+            // Only use TopAppBar in portrait. Landscape handles its own header to save space.
+            if (!isLandscape) {
+                TopAppBar(
+                    // Handle horizontal safe areas (notches) and status bar height
+                    windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
+                    title = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Calculate,
+                                contentDescription = "Calculator App Icon",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "Calculator",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                        }
+                    },
+                    actions = {
                         IconButton(
                             onClick = { viewModel.toggleScientificMode() },
                             modifier = Modifier.testTag("btn_toggle_scientific")
@@ -111,50 +112,94 @@ fun CalculatorScreen(
                                 tint = if (state.isScientific) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                             )
                         }
-                    }
-                    IconButton(
-                        onClick = { showHistorySheet = true },
-                        modifier = Modifier.testTag("btn_show_history")
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.History,
-                            contentDescription = "View Calculation History"
-                        )
-                    }
-                    IconButton(
-                        onClick = onLogout,
-                        modifier = Modifier.testTag("btn_logout")
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Logout,
-                            contentDescription = "Logout"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
+                        IconButton(
+                            onClick = { showHistorySheet = true },
+                            modifier = Modifier.testTag("btn_show_history")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.History,
+                                contentDescription = "View Calculation History"
+                            )
+                        }
+                        IconButton(
+                            onClick = onLogout,
+                            modifier = Modifier.testTag("btn_logout")
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.Logout,
+                                contentDescription = "Logout"
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent
+                    )
                 )
-            )
+            }
         }
     ) { innerPadding ->
         // Use a Column for the main content to ensure vertical flow is predictable
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(if (isLandscape) PaddingValues(0.dp) else innerPadding)
                 .consumeWindowInsets(innerPadding)
-                // Handle horizontal notches in landscape mode
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+                // safeDrawingPadding handles notches and status bars correctly on all devices
+                .safeDrawingPadding()
                 .padding(horizontal = 16.dp)
         ) {
-            // Even tighter in landscape/compact to ensure all buttons fit without excessive scrolling
-            val compact = stackedScientific || isLandscape
-            val standardButtonHeight = if (isLandscape) 38.dp else if (stackedScientific) 44.dp else 64.dp
-            val scientificButtonHeight = if (isLandscape) 38.dp else if (stackedScientific) 32.dp else 40.dp
-            val standardFontSize = if (compact) 18.sp else 22.sp
-            val rowSpacing = if (compact) 4.dp else 8.dp
+            // In landscape, we use a custom compact header that won't collide with status icons
+            if (isLandscape) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Calculate,
+                        contentDescription = "Calculator App Icon",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "Calculator",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                    IconButton(
+                        onClick = { showHistorySheet = true },
+                        modifier = Modifier.size(36.dp).testTag("btn_show_history")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "View Calculation History",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    IconButton(
+                        onClick = onLogout,
+                        modifier = Modifier.size(36.dp).testTag("btn_logout")
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = "Logout",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
 
-            // Displays Section — stays at the top, wrap content height
+            // Balancing space for displays and buttons
+            val compact = stackedScientific || isLandscape
+            val standardButtonHeight = if (isLandscape) 36.dp else if (stackedScientific) 44.dp else 64.dp
+            val scientificButtonHeight = if (isLandscape) 32.dp else if (stackedScientific) 32.dp else 40.dp
+            val standardFontSize = if (isLandscape) 16.sp else if (compact) 16.sp else 22.sp
+            val rowSpacing = if (isLandscape) 4.dp else if (compact) 4.dp else 8.dp
+
+            // Displays Section
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,7 +207,7 @@ fun CalculatorScreen(
                         onClick = { copyToClipboard(state.currentInput) },
                         onLongClick = { copyToClipboard(state.currentInput) }
                     )
-                    .padding(top = if (compact) 2.dp else 8.dp, bottom = if (compact) 4.dp else 12.dp),
+                    .padding(top = if (isLandscape) 12.dp else if (compact) 2.dp else 8.dp, bottom = if (isLandscape) 6.dp else if (compact) 4.dp else 12.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 // Secondary Display: Expression Formula
@@ -187,7 +232,7 @@ fun CalculatorScreen(
                     Text(
                         text = state.errorMessage,
                         color = MaterialTheme.colorScheme.error,
-                        fontSize = 14.sp,
+                        fontSize = 25.sp,
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.End,
                         modifier = Modifier
@@ -201,7 +246,7 @@ fun CalculatorScreen(
                     state.currentInput.length > 15 -> 20.sp
                     state.currentInput.length > 11 -> 28.sp
                     state.currentInput.length > 7 -> 36.sp
-                    isLandscape -> 34.sp
+                    isLandscape -> 24.sp
                     stackedScientific -> 38.sp
                     else -> 56.sp
                 }
@@ -231,26 +276,20 @@ fun CalculatorScreen(
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
                             contentDescription = "Copy Result",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             modifier = Modifier.size(if (compact) 14.dp else 18.dp)
                         )
                     }
                 }
             }
 
-            // In portrait mode, we want the display at the top and keypad at the bottom.
-            // This Spacer takes all available space between them.
-            if (!isLandscape) {
-                Spacer(modifier = Modifier.weight(1f))
-            }
+            // Pushes the keypad to the bottom of the screen
+            Spacer(modifier = Modifier.weight(1f))
 
             // Keypad Section
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    // In landscape, the keypad fills the remaining area alongside the display.
-                    // In portrait, it's pushed to the bottom by the spacer above.
-                    .then(if (isLandscape) Modifier.weight(1f) else Modifier)
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(rowSpacing)
             ) {
@@ -287,7 +326,7 @@ fun CalculatorScreen(
             }
 
             // Safety bottom padding
-            Spacer(modifier = Modifier.height(if (compact) 8.dp else 16.dp))
+            Spacer(modifier = Modifier.height(if (isLandscape) 4.dp else if (compact) 8.dp else 16.dp))
         }
     }
 
@@ -295,7 +334,7 @@ fun CalculatorScreen(
     if (showHistorySheet) {
         ModalBottomSheet(
             onDismissRequest = { showHistorySheet = false },
-            sheetState = sheetState,
+            sheetState = sheetState,//controls the sheets
             containerColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.testTag("history_bottom_sheet")
         ) {

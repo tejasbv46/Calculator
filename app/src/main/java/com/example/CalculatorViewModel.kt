@@ -54,7 +54,7 @@ class CalculatorViewModel(private val repository: HistoryRepository) : ViewModel
     }
 
     private fun handleNumber(number: String) {
-        if (isLastActionEquals || _state.value.currentInput == "0" || _state.value.currentInput == "Error") {
+        if (isLastActionEquals || _state.value.currentInput == "0" || _state.value.currentInput == "error") {
             _state.update { it.copy(currentInput = number) }
             isLastActionEquals = false
         } else {
@@ -191,9 +191,11 @@ class CalculatorViewModel(private val repository: HistoryRepository) : ViewModel
         } catch (e: Exception) {
             _state.update {
                 it.copy(
-                    currentInput = "Error",
+
+                    errorMessage = " error",
                     isError = true,
-                    errorMessage = "Syntax error"
+                    currentInput = "zero dividon error",
+
                 )
             }
             isLastActionEquals = true
