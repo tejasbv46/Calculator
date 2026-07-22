@@ -142,19 +142,18 @@ fun CalculatorScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(if (isLandscape) PaddingValues(0.dp) else innerPadding)
+                .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
                 // Handle horizontal notches in landscape mode
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 .padding(horizontal = 16.dp)
         ) {
-            // In landscape, we use a custom header that respects the status bar (clock/battery)
+            // In landscape, we use a custom header
             if (isLandscape) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .statusBarsPadding()
-                        .padding(top = 32.dp, bottom = 8.dp),
+                        .padding(top = 16.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -327,7 +326,7 @@ fun CalculatorScreen(
             }
 
             // Safety bottom padding
-            Spacer(modifier = Modifier.height(if (isLandscape) 4.dp else if (compact) 8.dp else 16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 
