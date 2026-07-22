@@ -144,16 +144,17 @@ fun CalculatorScreen(
                 .fillMaxSize()
                 .padding(if (isLandscape) PaddingValues(0.dp) else innerPadding)
                 .consumeWindowInsets(innerPadding)
-                // safeDrawingPadding handles notches and status bars correctly on all devices
-                .safeDrawingPadding()
+                // Handle horizontal notches in landscape mode
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 .padding(horizontal = 16.dp)
         ) {
-            // In landscape, we use a custom compact header that won't collide with status icons
+            // In landscape, we use a custom header that respects the status bar (clock/battery)
             if (isLandscape) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 4.dp),
+                        .statusBarsPadding()
+                        .padding(top = 20.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -194,10 +195,10 @@ fun CalculatorScreen(
 
             // Balancing space for displays and buttons
             val compact = stackedScientific || isLandscape
-            val standardButtonHeight = if (isLandscape) 36.dp else if (stackedScientific) 44.dp else 64.dp
-            val scientificButtonHeight = if (isLandscape) 32.dp else if (stackedScientific) 32.dp else 40.dp
-            val standardFontSize = if (isLandscape) 16.sp else if (compact) 16.sp else 22.sp
-            val rowSpacing = if (isLandscape) 4.dp else if (compact) 4.dp else 8.dp
+            val standardButtonHeight = if (isLandscape) 32.dp else if (stackedScientific) 44.dp else 64.dp
+            val scientificButtonHeight = if (isLandscape) 28.dp else if (stackedScientific) 32.dp else 40.dp
+            val standardFontSize = if (isLandscape) 15.sp else if (compact) 16.sp else 22.sp
+            val rowSpacing = if (isLandscape) 3.dp else if (compact) 4.dp else 8.dp
 
             // Displays Section
             Column(
@@ -207,7 +208,7 @@ fun CalculatorScreen(
                         onClick = { copyToClipboard(state.currentInput) },
                         onLongClick = { copyToClipboard(state.currentInput) }
                     )
-                    .padding(top = if (isLandscape) 12.dp else if (compact) 2.dp else 8.dp, bottom = if (isLandscape) 6.dp else if (compact) 4.dp else 12.dp),
+                    .padding(top = if (isLandscape) 16.dp else if (compact) 2.dp else 8.dp, bottom = if (isLandscape) 8.dp else if (compact) 4.dp else 12.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 // Secondary Display: Expression Formula
