@@ -8,7 +8,7 @@ Precision Calc is a complete, production-ready Android Calculator application bu
 
 i have implemented **Local Authentication** with secure salted hashing to manage user profiles on-device.
 
-### 🛡️ Local Auth vs. Firebase Authentication (Trade-offs)
+### 🛡️ Local Auth 
 - **Offline Autonomy**: Using a local SQLite Room database keeps the application 100% self-contained and offline-first. Users can registers and authenticate without any cell coverage or external network calls.
 - **Salted Password Hashing**: To prevent serious security leaks, **plain text passwords are never stored**. On registration, a cryptographically strong 16-byte random **Salt** is generated via `SecureRandom`. The password is then hashed using a standard **SHA-256** message digest mixed with the salt. On login, the entered password is salted and hashed with the saved salt, and then verified against the database.
 - **Session Persistence**: Login states are saved in a **Jetpack DataStore Preferences** file rather than lightweight database fields. DataStore performs safe, non-blocking, and thread-safe disk reads/writes on a background Dispatcher.
@@ -124,3 +124,4 @@ Our test suite covers all expected mathematics and safety boundaries:
 - **`testScientificFunctions()`**: Verifies trigonometric (in degrees), logarithms, factorials, and powers.
 - **`testDivisionByZero()`**: Verifies safety exceptions.
 - **`testInvalidInputs()`**: Ensures bad expressions throw appropriate exceptions safely.
+ 
