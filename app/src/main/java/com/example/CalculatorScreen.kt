@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +26,8 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -47,11 +50,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun CalculatorScreen(
     viewModel: CalculatorViewModel,
+    settingsViewModel: SettingsViewModel,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsState()
     val historyList by viewModel.historyList.collectAsState()
+    val isDarkModePref by settingsViewModel.isDarkMode.collectAsState()
+    val darkTheme = isDarkModePref ?: isSystemInDarkTheme()
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -113,6 +119,15 @@ fun CalculatorScreen(
                             )
                         }
                         IconButton(
+                            onClick = { settingsViewModel.toggleDarkMode(darkTheme) },
+                            modifier = Modifier.testTag("btn_theme_toggle")
+                        ) {
+                            Icon(
+                                imageVector = if (darkTheme) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                                contentDescription = "Toggle Theme"
+                            )
+                        }
+                        IconButton(
                             onClick = { showHistorySheet = true },
                             modifier = Modifier.testTag("btn_show_history")
                         ) {
@@ -169,6 +184,16 @@ fun CalculatorScreen(
                         fontSize = 18.sp,
                         modifier = Modifier.weight(1f)
                     )
+                    IconButton(
+                        onClick = { settingsViewModel.toggleDarkMode(darkTheme) },
+                        modifier = Modifier.size(36.dp).testTag("btn_theme_toggle")
+                    ) {
+                        Icon(
+                            imageVector = if (darkTheme) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                            contentDescription = "Toggle Theme",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                     IconButton(
                         onClick = { showHistorySheet = true },
                         modifier = Modifier.size(36.dp).testTag("btn_show_history")
@@ -341,7 +366,7 @@ fun CalculatorScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.6f)
+                    .fillMaxHeight(0.7f)
                     .padding(16.dp)
             ) {
                 Row(
