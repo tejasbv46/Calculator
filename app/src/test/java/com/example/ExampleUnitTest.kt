@@ -3,6 +3,7 @@ package com.example
 import org.junit.Assert.*
 import org.junit.Test
 
+
 class ExampleUnitTest {
 
     @Test
@@ -103,3 +104,21 @@ class ExampleUnitTest {
         assertEquals("0.3", Utils.formatResult(0.30000000000000004))
     }
 }
+
+//@Test
+//fun testNegativeNumbers() {
+//    assertEquals(-8.0, Utils.evaluate("-5 - 3"), 1e-9)
+//    assertEquals(2.0, Utils.evaluate("-5 + 7"), 1e-9)
+//    assertEquals(-15.0, Utils.evaluate("-5 × 3"), 1e-9)
+//    assertEquals(-2.5, Utils.evaluate("-5 ÷ 2"), 1e-9)
+//}
+//@Test
+//fun testDecimalCalculations() {
+//    assertEquals(5.85, Utils.evaluate("2.35 + 3.5"), 1e-9)
+//    assertEquals(2.25, Utils.evaluate("4.5 ÷ 2"), 1e-9)
+//}
+//@Test(expected = IllegalArgumentException::class)
+//fun testInvalidBrackets() {
+//    Utils.evaluate("(5 + 3")
+//}
+
