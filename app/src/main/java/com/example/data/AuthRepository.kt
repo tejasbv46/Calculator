@@ -57,6 +57,8 @@ class AuthRepositoryImpl(
 
         val computedHash = SecurityUtils.hashPassword(password, user.salt)
         if (computedHash != user.passwordHash) {
+
+
             return Result.failure(IllegalArgumentException("Invalid username or password"))
         }
 
