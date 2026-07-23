@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.CalculatorDatabase
 import com.example.data.HistoryRepository
+import com.example.data.SettingsRepository
 import com.example.ui.theme.MyApplicationTheme
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -29,10 +30,16 @@ class GreetingScreenshotTest {
     val database = CalculatorDatabase.getDatabase(context)
     val repository = HistoryRepository(database.historyDao())
     val viewModel = CalculatorViewModel(repository)
+    val settingsRepository = SettingsRepository(context)
+    val settingsViewModel = SettingsViewModel(settingsRepository)
 
     composeTestRule.setContent {
       MyApplicationTheme {
-        CalculatorScreen(viewModel = viewModel, onLogout = {})
+        CalculatorScreen(
+          viewModel = viewModel,
+          settingsViewModel = settingsViewModel,
+          onLogout = {}
+        )
       }
     }
 
