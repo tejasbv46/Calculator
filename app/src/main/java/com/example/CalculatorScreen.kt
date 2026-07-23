@@ -1,5 +1,6 @@
 package com.example
 
+//github.com/tejasbv46/Calculator.gitmport androidx.compose.material.icons.automirrored.filled.Backspace
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-//github.com/tejasbv46/Calculator.gitmport androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ContentCopy
@@ -465,7 +465,7 @@ fun StandardButtons(viewModel: CalculatorViewModel, buttonHeight: Dp = 64.dp, fo
                 fontSize = fontSize,
                 onClick = { viewModel.onAction(it) },
                 containerColor = MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.onTertiary,
+                contentColor = Color.Black,
                 modifier = modifier
             )
             CalculatorButton(
