@@ -87,7 +87,7 @@ fun CalculatorButton(
         modifier = modifier
             .scale(scale)
             .testTag(tag),
-        shape = RoundedCornerShape(24.dp), // modern squircle rounded shape
+        shape = RoundedCornerShape(32.dp), // modern squircle rounded shape
         color = containerColor,
         contentColor = contentColor,
         tonalElevation = if (isPressed) 8.dp else 2.dp
