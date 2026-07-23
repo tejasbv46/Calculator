@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.data.AuthRepositoryImpl
 import com.example.data.CalculatorDatabase
 import com.example.data.HistoryRepository
+import com.example.data.SettingsRepository
 import com.example.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
         val database = CalculatorDatabase.getDatabase(applicationContext)
         val historyRepository = HistoryRepository(database.historyDao())
         val authRepository = AuthRepositoryImpl(database.userDao(), applicationContext)
+        val settingsRepository = SettingsRepository(applicationContext)
 
         // Initialize ViewModels using custom factories
         val calculatorViewModel: CalculatorViewModel by viewModels {
@@ -43,9 +45,16 @@ class MainActivity : ComponentActivity() {
         val authViewModel: AuthViewModel by viewModels {
             AuthViewModel.Factory(authRepository)
         }
+        val settingsViewModel: SettingsViewModel by viewModels {
+            SettingsViewModel.Factory(settingsRepository)
+        }
 
         setContent {
-            MyApplicationTheme {
+            val isDarkModePref by settingsViewModel.isDarkMode.collectAsState()
+            
+            MyApplicationTheme(
+                darkTheme = isDarkModePref ?: androidx.compose.foundation.isSystemInDarkTheme()
+            ) {
                 // Use Surface to provide the background color. 
                 // We remove the outer Scaffold to prevent double-padding/double-insets,
                 // as each screen (Login, Register, Calculator) has its own Scaffold.
@@ -111,6 +120,7 @@ class MainActivity : ComponentActivity() {
                                 } else {
                                     CalculatorScreen(
                                         viewModel = calculatorViewModel,
+                                        settingsViewModel = settingsViewModel,
                                         onLogout = {
                                             authViewModel.logout()
                                             navController.navigate("login") {
