@@ -25,7 +25,7 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
     }
 
     class Factory(private val repository: SettingsRepository) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
+        @Suppress("UNCHECKED_CAST")// to remove complier warnings
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
                 return SettingsViewModel(repository) as T

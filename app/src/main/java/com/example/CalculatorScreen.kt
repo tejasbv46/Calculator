@@ -268,8 +268,8 @@ fun CalculatorScreen(
 
                 // Primary Display: Output Result / Input (Scales dynamically)
                 val primaryFontSize = when {
-                    state.currentInput.length > 15 -> 20.sp
-                    state.currentInput.length > 11 -> 28.sp
+                   state.currentInput.length > 15 -> 20.sp
+                   state.currentInput.length > 11 -> 28.sp
                     state.currentInput.length > 7 -> 36.sp
                     isLandscape -> 24.sp
                     stackedScientific -> 38.sp
@@ -480,7 +480,7 @@ fun StandardButtons(viewModel: CalculatorViewModel, buttonHeight: Dp = 64.dp, fo
                 action = CalculatorButtonAction.AllClear,
                 fontSize = fontSize,
                 onClick = { viewModel.onAction(it) },
-                containerColor = MaterialTheme.colorScheme.tertiary,
+                containerColor = Color.Red,
                 contentColor = MaterialTheme.colorScheme.onTertiary,
                 modifier = modifier
             )
